@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class StateCensusAnalyser {
 
-    public int loadCensusData(String csvFilePath) throws IOException {
+    public int loadCensusData(String csvFilePath) throws CensusAnalyserException {
         int recordCounter = 0;
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
@@ -23,7 +23,7 @@ public class StateCensusAnalyser {
                 stateCodeIterator.next();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
         return recordCounter;
     }
