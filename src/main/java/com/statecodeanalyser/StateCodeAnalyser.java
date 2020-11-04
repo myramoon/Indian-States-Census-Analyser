@@ -28,6 +28,8 @@ public class StateCodeAnalyser {
             }
         }  catch (IOException e) {
             throw new StateCodeAnalyserException("Please check given path" , StateCodeAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        } catch (RuntimeException e) {
+            throw new StateCodeAnalyserException("Internal file error.Please check your csv file." , StateCodeAnalyserException.ExceptionType.INTERNAL_FILE_ISSUES);
         }
         return recordCounter;
     }
