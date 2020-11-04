@@ -7,13 +7,12 @@ public class CensusAnalyserTest {
     private static final String INDIAN_CENSUS_CSV_FILE_PATH = "./src/main/resources/IndiaStateCensusData.csv" ;
     private static final String WRONG_CENSUS_CSV_FILE_PATH = "./src/test/resources/IndiaStateCensusData.csv" ;
     private static final String WRONG_CENSUS_CSV_FILE_EXTENSION = "./src/main/resources/IndiaStateCensusData.ppt" ;
+    private static final String WRONG_CENSUS_CSV_DELIMITER = "./src/main/resources/IndiaStateCensusDataWrongDelimiter.csv" ;
 
     @Test
     public void givenStateCensusCSVFile_ShouldMatchNumberOfRecordsInFile() {
         try {
             StateCensusAnalyser censusAnalyser = new StateCensusAnalyser();
-            InputValidator inputValidator = new InputValidator();
-            boolean result = inputValidator.validateFileExtension(INDIAN_CENSUS_CSV_FILE_PATH);
             int count = censusAnalyser.loadCensusData(INDIAN_CENSUS_CSV_FILE_PATH);
             Assert.assertEquals(29, count);
         }catch (CensusAnalyserException e) {
@@ -32,8 +31,9 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM , e.type);
         }
     }
+
     @Test
-    public void GivenStateCensusCSVFile_WhenFileExtensionIncorrect_ShouldThrowException() {
+    public void GivenStateCensusCSVFile_WhenFileExtensionIncorrect_ShouldThrowException()  {
         try {
             StateCensusAnalyser censusAnalyser = new StateCensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
@@ -42,6 +42,20 @@ public class CensusAnalyserTest {
         } catch (CensusAnalyserException e) {
             System.out.println(e.getMessage());
             Assert.assertEquals(CensusAnalyserException.ExceptionType.INCORRECT_EXTENSION , e.type);
+        }
+    }
+
+    @Test
+    public void givenStateCensusCSVFile_WhenHavingWrongDelimiter_ShouldThrowException()  {
+        try {
+            StateCensusAnalyser censusAnalyser = new StateCensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            int count = censusAnalyser.loadCensusData(WRONG_CENSUS_CSV_DELIMITER);
+            System.out.println(count);
+        } catch (CensusAnalyserException e) {
+            System.out.println(e.getMessage());
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.DELIMITER_ERROR , e.type);
         }
     }
 }
