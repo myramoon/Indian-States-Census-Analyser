@@ -22,7 +22,7 @@ public class IndianCensusAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))){
             Iterator<IndianCensusData> censusDataIterator = this.getCSVFileIterator(reader , IndianCensusData.class);
             Iterable<IndianCensusData> csvIterable = () -> censusDataIterator;
-            int recordCounter = (int) StreamSupport.stream(csvIterable.spliterator() , false).count();
+            int recordCounter = this.getCountOfRecords(csvIterable);
             return recordCounter;
         } catch (IOException e) {
             throw new CensusAnalyserException("Please check your file path", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -36,13 +36,18 @@ public class IndianCensusAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))){
             Iterator<StateCodeData> stateCodeIterator = this.getCSVFileIterator(reader , StateCodeData.class);
             Iterable<StateCodeData> csvIterable = () -> stateCodeIterator;
-            int recordCounter = (int) StreamSupport.stream(csvIterable.spliterator() , false).count();
+            int recordCounter = this.getCountOfRecords(csvIterable);
             return recordCounter;
         } catch (IOException e) {
             throw new CensusAnalyserException("Please check your file path", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }catch (RuntimeException e) {
             throw new CensusAnalyserException("Internal file error.Please check your csv file." , CensusAnalyserException.ExceptionType.INTERNAL_FILE_ISSUES);
         }
+    }
+
+    private <E> int getCountOfRecords(Iterable<E> csvIterable) {
+        int recordCounter = (int) StreamSupport.stream(csvIterable.spliterator() , false).count();
+        return recordCounter;
     }
 
     private <E> Iterator<E> getCSVFileIterator(Reader reader , Class<E> csvClass) throws CensusAnalyserException {
