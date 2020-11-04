@@ -74,7 +74,6 @@ public class CensusDataAnalyserTest {
         }
     }
 
-
     @Test
     public void givenStateCensusCSVFile_ShouldMatchNumberOfRecordsInFile() {
         try {
