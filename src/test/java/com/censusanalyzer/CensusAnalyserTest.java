@@ -8,6 +8,7 @@ public class CensusAnalyserTest {
     private static final String WRONG_CENSUS_CSV_FILE_PATH = "./src/test/resources/IndiaStateCensusData.csv" ;
     private static final String WRONG_CENSUS_CSV_FILE_EXTENSION = "./src/main/resources/IndiaStateCensusData.ppt" ;
     private static final String WRONG_CENSUS_CSV_DELIMITER = "./src/main/resources/IndiaStateCensusDataWrongDelimiter.csv" ;
+    private static final String WRONG_CENSUS_CSV_HEADER = "./src/main/resources/WrongHeaderStateCensusData.csv" ;
 
     @Test
     public void givenStateCensusCSVFile_ShouldMatchNumberOfRecordsInFile() {
@@ -54,8 +55,20 @@ public class CensusAnalyserTest {
             int count = censusAnalyser.loadCensusData(WRONG_CENSUS_CSV_DELIMITER);
             System.out.println(count);
         } catch (CensusAnalyserException e) {
-            System.out.println(e.getMessage());
-            Assert.assertEquals(CensusAnalyserException.ExceptionType.DELIMITER_ERROR , e.type);
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.INTERNAL_FILE_ISSUES , e.type);
+        }
+    }
+
+    @Test
+    public void givenStateCensusCSVFile_WhenHavingWrongHeader_ShouldThrowException()  {
+        try {
+            StateCensusAnalyser censusAnalyser = new StateCensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            int count = censusAnalyser.loadCensusData(WRONG_CENSUS_CSV_HEADER);
+            System.out.println(count);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.INTERNAL_FILE_ISSUES , e.type);
         }
     }
 }

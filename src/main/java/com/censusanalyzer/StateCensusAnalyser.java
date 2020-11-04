@@ -33,7 +33,7 @@ public class StateCensusAnalyser {
         } catch (IllegalStateException e) {
             throw new CensusAnalyserException("Unable to parse." , CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
         } catch (RuntimeException e) {
-            throw new CensusAnalyserException("Delimiter error.Please check your csv file." , CensusAnalyserException.ExceptionType.DELIMITER_ERROR);
+            throw new CensusAnalyserException("Delimiter error.Please check your csv file." , CensusAnalyserException.ExceptionType.INTERNAL_FILE_ISSUES);
         }
         return recordCounter;
     }
