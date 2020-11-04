@@ -1,6 +1,4 @@
 package com.bridgelabz.indiancensusanalyzer;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -20,10 +18,8 @@ public class IndianCensusAnalyser {
     public int loadCensusData(String csvFilePath ) throws CensusAnalyserException {
         validateExtension(csvFilePath);
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))){
-            Iterator<IndianCensusData> censusDataIterator = this.getCSVFileIterator(reader , IndianCensusData.class);
-            Iterable<IndianCensusData> csvIterable = () -> censusDataIterator;
-            int recordCounter = this.getCountOfRecords(csvIterable);
-            return recordCounter;
+            Iterator<IndianCensusData> censusDataIterator = new OpenCSVBuilder().getCSVFileIterator(reader , IndianCensusData.class);
+            return this.getCountOfRecords(censusDataIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException("Please check your file path", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }catch (RuntimeException e) {
@@ -34,10 +30,8 @@ public class IndianCensusAnalyser {
     public int loadStateCodeData(String csvFilePath ) throws CensusAnalyserException {
         validateExtension(csvFilePath);
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))){
-            Iterator<StateCodeData> stateCodeIterator = this.getCSVFileIterator(reader , StateCodeData.class);
-            Iterable<StateCodeData> csvIterable = () -> stateCodeIterator;
-            int recordCounter = this.getCountOfRecords(csvIterable);
-            return recordCounter;
+            Iterator<StateCodeData> stateCodeIterator = new OpenCSVBuilder().getCSVFileIterator(reader , StateCodeData.class);
+            return this.getCountOfRecords(stateCodeIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException("Please check your file path", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }catch (RuntimeException e) {
@@ -45,20 +39,10 @@ public class IndianCensusAnalyser {
         }
     }
 
-    private <E> int getCountOfRecords(Iterable<E> csvIterable) {
+    private <E> int getCountOfRecords( Iterator<E> DataIterator) {
+        Iterable<E> csvIterable = () -> DataIterator;
         int recordCounter = (int) StreamSupport.stream(csvIterable.spliterator() , false).count();
         return recordCounter;
     }
 
-    private <E> Iterator<E> getCSVFileIterator(Reader reader , Class<E> csvClass) throws CensusAnalyserException {
-        try {
-            CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<E>(reader);
-            csvToBeanBuilder.withType(csvClass);
-            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-            CsvToBean<E> csvToBean = csvToBeanBuilder.build();
-            return csvToBean.iterator();
-        } catch (IllegalStateException e) {
-            throw new CensusAnalyserException("Unable to parse.", CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
-        }
-    }
 }
