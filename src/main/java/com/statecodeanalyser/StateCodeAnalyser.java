@@ -26,8 +26,8 @@ public class StateCodeAnalyser {
                 recordCounter++;
                 stateCodeIterator.next();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }  catch (IOException e) {
+            throw new StateCodeAnalyserException("Please check given path" , StateCodeAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
         return recordCounter;
     }
