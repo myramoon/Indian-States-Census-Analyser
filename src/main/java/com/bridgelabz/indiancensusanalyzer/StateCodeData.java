@@ -1,4 +1,4 @@
-package com.statecodeanalyser;
+package com.bridgelabz.indiancensusanalyzer;
 import com.opencsv.bean.CsvBindByName;
 
 public class StateCodeData {
@@ -11,6 +11,12 @@ public class StateCodeData {
     public long tin;
     @CsvBindByName(column = "State Code")
     public long stateCode;
+
+    public String toString() {
+        return "IndianStateCodeCSV {" + "state = " + state + '\'' + ", state code = " + stateCode + '\'' + '}';
+    }
 }
+
+
 
 

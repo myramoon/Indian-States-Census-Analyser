@@ -1,6 +1,7 @@
-package com.censusanalyzer;
+package com.bridgelabz.indiancensusanalyzer;
 
-public class InputValidator  {
+public class InputValidator {
+
     private static final String REGEX_EXTENSION = ".*.csv$";
     IPattern iPattern;
     public InputValidator() {

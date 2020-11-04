@@ -1,8 +1,7 @@
-package com.censusanalyzer;
+package com.bridgelabz.indiancensusanalyzer;
 import com.opencsv.bean.CsvBindByName;
 
-public class IndianStateCode {
-
+public class IndianCensusData {
     @CsvBindByName(column = "State")
     public String state;
     @CsvBindByName(column = "Population")
@@ -12,4 +11,3 @@ public class IndianStateCode {
     @CsvBindByName(column = "DensityPerSqKm")
     public long densityPerSqKm;
 }
-
