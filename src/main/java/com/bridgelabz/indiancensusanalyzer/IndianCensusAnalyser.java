@@ -4,6 +4,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class IndianCensusAnalyser {
@@ -19,8 +20,8 @@ public class IndianCensusAnalyser {
         validateExtension(csvFilePath);
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))){
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IndianCensusData> censusDataIterator = csvBuilder.getCSVFileIterator(reader , IndianCensusData.class);
-            return this.getCountOfRecords(censusDataIterator);
+            List<IndianCensusData> censusDataList = csvBuilder.getCSVFileList(reader , IndianCensusData.class);
+            return censusDataList.size();
         } catch (IOException e) {
             throw new CensusAnalyserException("Please check your file path", CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }catch (RuntimeException e) {
@@ -46,5 +47,4 @@ public class IndianCensusAnalyser {
         int recordCounter = (int) StreamSupport.stream(csvIterable.spliterator() , false).count();
         return recordCounter;
     }
-
 }

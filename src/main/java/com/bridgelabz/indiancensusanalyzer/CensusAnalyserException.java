@@ -10,6 +10,7 @@ public class CensusAnalyserException extends Exception {
         super(message);
         this.type = type;
     }
+
 }
 
 
